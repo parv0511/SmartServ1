@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Asynchronous javascript</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compitable" content="ie=edge" />
+  </head>
+  <body>
+    <div class="container">
+      <table class="table table-stripped">
+        <span class="main"> </span>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>subcategory</th>
+            <th>price</th>
+            <th>popularity</th>
+          </tr>
+        </thead>
+        <tbody id="data"></tbody>
+      </table>
+    </div>
+
+    <script>
+      fetch('https://s3.amazonaws.com/open-to-cors/assignment.json')
+        .then((result) => {
+          console.log(result)
+          return result.json()
+        })
+        .then((data) => {
+          console.log(data)
+          var temp = ''
+          
+
+          /*console.log('this is here',document.querySelector('.main').innerText);
+                        const sortObject = data => {
+                        const arr = Object.keys(data.products).map(el => {
+                                return data.products[el].popularity;
+                            });
+                            arr.sort((a, b) => {
+                                return b - a;
+                            });
+                            return arr;
+                        };
+                        console.log(sortObject(data));*/
+          function sortJson(element, prop, propType, asc) {
+            switch (propType) {
+              case 'int':
+                element = element.sort(function (a, b) {
+                  if (asc) {
+                    return parseInt(a[prop]) > parseInt(b[prop])
+                      ? 1
+                      : parseInt(a[prop]) < parseInt(b[prop])
+                      ? -1
+                      : 0
+                  } else {
+                    return parseInt(b[prop]) > parseInt(a[prop])
+                      ? 1
+                      : parseInt(b[prop]) < parseInt(a[prop])
+                      ? -1
+                      : 0
+                  }
+                })
+                break
+              default:
+                element = element.sort(function (a, b) {
+                  if (asc) {
+                    return a[prop].toLowerCase() > b[prop].toLowerCase()
+                      ? 1
+                      : a[prop].toLowerCase() < b[prop].toLowerCase()
+                      ? -1
+                      : 0
+                  } else {
+                    return b[prop].toLowerCase() > a[prop].toLowerCase()
+                      ? 1
+                      : b[prop].toLowerCase() < a[prop].toLowerCase()
+                      ? -1
+                      : 0
+                  }
+                })
+            }
+          }
+
+          Object.keys(data.products).forEach((val) => {
+            //document.querySelector('.meri-class').innerText = `${data.products[val].popularity} ${data.products[val].price} ${data.products[val].subcategory} ${data.products[val].title} `;
+            //console.log(data.products[val]);
+            temp += '<tr>'
+            temp += '<td>' + data.products[val].title + '</td>'
+            temp += '<td>' + data.products[val].subcategory + '</td>'
+            temp += '<td>' + data.products[val].price + '</td>'
+            temp += '<td>' + data.products[val].popularity + '</td></tr>'
+          })
+          document.getElementById('data').innerHTML = temp
+        })
+        .catch((error) => console.log(error))
+    </script>
+  </body>
+</html>
